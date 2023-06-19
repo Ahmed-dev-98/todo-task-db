@@ -1,0 +1,23 @@
+
+
+export class AppeError extends Error {
+    constructor(message,statusCode) {
+
+        super(message)
+        this.statusCode = statusCode
+        this.status = `${statusCode}`.startsWith('4')? 'fail' : 'server error'
+
+        Error.captureStackTrace(this , this.constructor)
+    }
+
+}
+
+
+
+export const catchAsyncError = (fn) => {
+    return (req, res, next) => {
+        fn(req, res, next).catch(err => {
+            next(err)
+        })
+    }
+}
